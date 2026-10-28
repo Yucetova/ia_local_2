@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#102a43">
+    <meta name="description" content="Panel ejecutivo para analizar órdenes de trabajo de mantenimiento CMMS/GMAO.">
+    <title>GMAO | Inteligencia de mantenimiento</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#inicio" aria-label="Ir al inicio">
+          <span class="brand-mark" aria-hidden="true">M</span>
+          <span><strong>MAINT<span>IQ</span></strong><small>INTELIGENCIA DE ACTIVOS</small></span>
+        </a>
+        <div class="side-label">ESPACIO DE TRABAJO</div>
+        <nav class="navigation" aria-label="Navegación principal">
+          <a class="nav-link active" href="#inicio"><span class="nav-icon">▦</span> Resumen ejecutivo</a>
+          <a class="nav-link" href="#analisis"><span class="nav-icon">◫</span> Análisis operativo</a>
+          <a class="nav-link" href="#fallas"><span class="nav-icon">⌁</span> Fallas recurrentes</a>
+          <a class="nav-link" href="#datos"><span class="nav-icon">⇧</span> Datos y metodología</a>
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="privacy-note"><span class="privacy-icon">◉</span><div><strong>Procesamiento local</strong><p>Los datos permanecen en tu navegador y no se envían a ningún servidor.</p></div></div>
+          <div class="sidebar-foot">MAINTIQ <span>·</span> EDICIÓN CMMS</div>
+        </div>
+      </aside>
+
+      <main class="main-content" id="inicio">
+        <header class="topbar">
+          <div class="breadcrumbs">Mantenimiento <span>/</span> <strong>Panel ejecutivo</strong></div>
+          <div class="top-actions">
+            <span class="data-status"><i></i><span id="dataset-status">Cargando dataset…</span></span>
+            <button class="button button-outline" id="export-button" type="button"><span aria-hidden="true">↓</span> Exportar informe PDF</button>
+          </div>
+        </header>
+
+        <section class="page-heading">
+          <div>
+            <p class="eyebrow">GESTIÓN DE ACTIVOS · CMMS / GMAO</p>
+            <h1>Resumen ejecutivo</h1>
+            <p class="subtitle">Una visión clara del desempeño, los recursos y las prioridades de mantenimiento.</p>
+          </div>
+          <div class="report-meta"><span class="meta-label">PERÍODO ANALIZADO</span><strong id="period-label">—</strong><span id="updated-label">Actualizado al cargar el dataset</span></div>
+        </section>
+
+        <section class="toolbar" aria-label="Filtros del análisis">
+          <div class="filter-heading"><span class="filter-icon">☷</span><strong>Filtros</strong><span class="filter-separator"></span><span class="filter-caption">Actualizan todas las métricas y gráficas</span></div>
+          <label class="filter-control"><span>Tipo de mantenimiento</span><select id="type-filter"><option value="">Todos los tipos</option></select></label>
+          <label class="filter-control"><span>Área operativa</span><select id="area-filter"><option value="">Todas las áreas</option></select></label>
+          <button class="reset-button" id="reset-filters" type="button">Restablecer</button>
+        </section>
+
+        <section class="kpi-grid" aria-label="Indicadores clave">
+          <article class="kpi-card"><div class="kpi-top"><span class="kpi-label">ÓRDENES DE TRABAJO</span><span class="kpi-icon blue">▤</span></div><strong class="kpi-value" id="kpi-orders">—</strong><div class="kpi-foot"><span class="kpi-context">OT únicas analizadas</span><span class="kpi-accent" id="kpi-orders-note">—</span></div></article>
+          <article class="kpi-card"><div class="kpi-top"><span class="kpi-label">HORAS-HOMBRE</span><span class="kpi-icon violet">◷</span></div><strong class="kpi-value" id="kpi-labor">—</strong><div class="kpi-foot"><span class="kpi-context">Esfuerzo registrado</span><span class="kpi-accent" id="kpi-labor-note">—</span></div></article>
+          <article class="kpi-card"><div class="kpi-top"><span class="kpi-label">DOWNTIME TOTAL</span><span class="kpi-icon amber">◴</span></div><strong class="kpi-value" id="kpi-downtime">—</strong><div class="kpi-foot"><span class="kpi-context">Horas de indisponibilidad</span><span class="kpi-accent" id="kpi-downtime-note">—</span></div></article>
+          <article class="kpi-card"><div class="kpi-top"><span class="kpi-label">COSTO DIRECTO</span><span class="kpi-icon green">$</span></div><strong class="kpi-value compact" id="kpi-cost">—</strong><div class="kpi-foot"><span class="kpi-context">Costo total registrado</span><span class="kpi-accent" id="kpi-cost-note">CLP</span></div></article>
+          <article class="kpi-card"><div class="kpi-top"><span class="kpi-label">MTTR CORRECTIVO</span><span class="kpi-icon rose">⌁</span></div><strong class="kpi-value" id="kpi-mttr">—</strong><div class="kpi-foot"><span class="kpi-context">Promedio de reparación</span><span class="kpi-accent">h / OT</span></div></article>
+          <article class="kpi-card"><div class="kpi-top"><span class="kpi-label">MEDIANA DE REPARACIÓN</span><span class="kpi-icon blue">◷</span></div><strong class="kpi-value" id="kpi-median">—</strong><div class="kpi-foot"><span class="kpi-context">Duración típica</span><span class="kpi-accent">h / OT</span></div></article>
+        </section>
+
+        <section class="insight-banner" id="insight-banner" aria-live="polite">
+          <span class="insight-icon">✳</span><div><span class="insight-label">HALLAZGO DESTACADO</span><p id="insight-text">Analizando los registros del dataset…</p></div>
+          <span class="insight-tag">LECTURA AUTOMÁTICA</span>
+        </section>
+
+        <section class="section-block" id="analisis">
+          <div class="section-heading"><div><p class="eyebrow">DESEMPEÑO Y RECURSOS</p><h2>Panorama operacional</h2></div><span class="section-note">Composición por estrategia de mantenimiento</span></div>
+          <div class="chart-grid">
+            <article class="chart-card"><div class="chart-title"><div><h3>Órdenes por estrategia</h3><p>Distribución de OT únicas por tipo</p></div><span class="chart-index">01</span></div><div class="chart-container" id="orders-chart"></div></article>
+            <article class="chart-card"><div class="chart-title"><div><h3>Horas-hombre por estrategia</h3><p>Esfuerzo acumulado por tipo de mantenimiento</p></div><span class="chart-index">02</span></div><div class="chart-container" id="labor-chart"></div></article>
+            <article class="chart-card"><div class="chart-title"><div><h3>Indisponibilidad por estrategia</h3><p>Horas de downtime asociadas a cada tipo</p></div><span class="chart-index">03</span></div><div class="chart-container" id="downtime-chart"></div></article>
+            <article class="chart-card"><div class="chart-title"><div><h3>Costo directo por estrategia</h3><p>Distribución del costo total registrado (CLP)</p></div><span class="chart-index">04</span></div><div class="chart-container" id="cost-chart"></div></article>
+          </div>
+          <article class="table-card strategy-summary">
+            <div class="chart-title"><div><h3>Impacto por estrategia</h3><p>Participación de cada tipo en los indicadores seleccionados</p></div><span class="chart-index">RESUMEN</span></div>
+            <div class="table-wrap"><table><thead><tr><th>Tipo de mantenimiento</th><th class="align-right">% OT</th><th class="align-right">% Horas-hombre</th><th class="align-right">% Downtime</th><th class="align-right">% Costo</th></tr></thead><tbody id="type-summary"></tbody></table></div>
+          </article>
+        </section>
+
+        <section class="section-block" id="fallas">
+          <div class="section-heading"><div><p class="eyebrow">CONFIABILIDAD Y PRIORIZACIÓN</p><h2>Fallas y activos prioritarios</h2></div><span class="section-note">Enfoque sobre los principales contribuyentes</span></div>
+          <div class="lower-grid">
+            <article class="chart-card"><div class="chart-title"><div><h3>Top equipos por downtime</h3><p>Activos con más horas de indisponibilidad</p></div><span class="chart-index">05</span></div><div class="chart-container" id="equipment-chart"></div></article>
+            <article class="table-card"><div class="chart-title"><div><h3>Modos de falla más frecuentes</h3><p>Principales oportunidades de mejora</p></div><span class="chart-index">06</span></div><div class="table-wrap"><table><thead><tr><th>Modo de falla</th><th class="align-right">OT</th><th class="align-right">Downtime</th></tr></thead><tbody id="failure-table"></tbody></table></div></article>
+          </div>
+        </section>
+
+        <section class="section-block" id="datos">
+          <div class="section-heading"><div><p class="eyebrow">PERSONALIZA TU ANÁLISIS</p><h2>Dataset y metodología</h2></div></div>
+          <div class="data-panel">
+            <div class="upload-copy"><span class="upload-icon">⇧</span><div><h3>Carga un nuevo dataset</h3><p>Selecciona o arrastra un archivo CSV con la estructura de órdenes de trabajo del análisis GMAO.</p>                        <div class="schema-hint">Columnas requeridas: <code>Tipo_mantenimiento</code>, <code>Equipo</code>, <code>Downtime_h</code>, <code>Horas_mano_obra</code> y <code>Costo_total_CLP</code>. Para calcular MTTR incluye <code>Estado</code>, <code>Fecha_inicio</code> y <code>Fecha_fin</code>. Puedes arrastrar el CSV hasta aquí.</div></div></div>
+            <div class="upload-actions"><label class="button button-primary upload-button" for="file-input">Seleccionar archivo CSV</label><input id="file-input" type="file" accept=".csv,text/csv"><button id="sample-button" class="text-button" type="button">Volver al dataset de ejemplo</button><span id="upload-message" class="upload-message" role="status"></span></div>
+          </div>
+          <div class="method-note"><span class="method-icon">i</span><p><strong>Metodología.</strong> Los indicadores se calculan directamente desde las filas seleccionadas. Las filas duplicadas exactas se eliminan; las OT se cuentan de forma única cuando existe el campo <code>OT</code>. El MTTR es el promedio de horas entre inicio y fin para órdenes correctivas cerradas con fechas válidas y duración positiva. Se admiten fechas <code>DD-MM-AAAA</code> e ISO; los campos numéricos aceptan coma o punto decimal.</p></div>
+        </section>
+
+        <footer class="page-footer"><span>MAINTIQ <span class="footer-divider">·</span> ANÁLISIS DE MANTENIMIENTO</span><span>Informe generado localmente en el navegador</span></footer>
+      </main>
+    </div>
+    <script src="./app.js"></script>
+  </body>
+</html>
